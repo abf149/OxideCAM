@@ -26,3 +26,9 @@
 *.exe
 *.out
 *.app
+
+# Nano backup files
+*~
+
+#Compiled Python files
+*.pyc
