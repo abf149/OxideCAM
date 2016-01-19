@@ -2,6 +2,7 @@
 
 TODO:
 -REFACTOR!!!!
+-Add bash script to run python
 -Fix divide-by-zero bug for case where pixels are smaller than scribe tip
 -Accept filename on command line.
 -Accept pixel/design dimensions on command line.
