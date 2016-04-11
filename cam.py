@@ -8,11 +8,15 @@
 #
 #
 #
+#Dependencies:
+#
+#Expects config.txt in local directory.
 #
 #TODO: input args
 #TODO: config file
 #TODO: create/write to file
 #TODO: pixel magnitude rescale
+#TODO: map to control value
 #TODO: file top comments
 ##
 
