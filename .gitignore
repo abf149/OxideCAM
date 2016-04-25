@@ -29,3 +29,6 @@
 *.exe
 *.out
 *.app
+
+#GCODE files
+*.gcode
