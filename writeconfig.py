@@ -10,13 +10,9 @@ config = ConfigParser.RawConfigParser()
 # when attempting to write to a file or when you get it in non-raw
 # mode. SafeConfigParser does not allow such assignments to take place.
 config.add_section('Section1')
-config.set('Section1', 'an_int', '15')
-config.set('Section1', 'a_bool', 'true')
-config.set('Section1', 'a_float', '3.1415')
-config.set('Section1', 'baz', 'fun')
-config.set('Section1', 'bar', 'Python')
-config.set('Section1', 'foo', '%(bar)s is %(baz)s!')
+config.set('Section1', 'pointilist', 'false')
+config.set('Section1', 'tool_diameter_mm', '1.0')
 
-# Writing our configuration file to 'example.cfg'
+# Writing our configuration file to 'cam.cfg'
 with open('cam.cfg', 'wb') as configfile:
     config.write(configfile)

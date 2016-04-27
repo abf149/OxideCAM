@@ -27,7 +27,9 @@ from normalized_potential_list_to_cam_code_list import normalized_potential_list
 from cam_code_list_to_gcode_file import cam_code_list_to_gcode_file
 
 import argparse
+import ConfigParser
 
+#Parse CMD arguments
 parser = argparse.ArgumentParser(description='Generate a GCODE file for rendering an image as a patterned electrochemical deposit on a metal plate.')
 parser.add_argument('Input File', help='The relative path to an existing bitmap image file to take as input.')
 parser.add_argument('Plate Width', type=float, help='The width (mm) of the metal plate/image surface')
@@ -46,16 +48,20 @@ plate_height=input_vars['Plate Height']
 input_filename=input_vars['Input File']
 output_filename=input_vars['Output File']
 
+#Load configuration file
+config = ConfigParser.RawConfigParser()
+config.read('cam.cfg')
+config_dict = {'tool_diameter_mm':config.getfloat('Section1', 'tool_diameter_mm'),'pointilist':config.getboolean('Section1','pointilist')}
 
 #Flatten the input bitmap to a list of pixel magnitudes
 (bmp_pixel_width,bmp_pixel_height,number_of_pixels,pixel_magnitude_list)=bmp_to_pixel_magnitude_list(input_filename)
 
 #Rescale pixel magnitudes to normalized ([0,1]) electrochemical potentials
-normalized_potential_list=pixel_magnitude_list_to_normalized_potential_list(pixel_magnitude_list,{})
+normalized_potential_list=pixel_magnitude_list_to_normalized_potential_list(pixel_magnitude_list,config_dict)
 
 #Convert normalized potentials to CAM control codes for the electrochemical voltage source
-cam_code_list=normalized_potential_list_to_cam_code_list(normalized_potential_list,{})
+cam_code_list=normalized_potential_list_to_cam_code_list(normalized_potential_list,config_dict)
 
 #GCode
-cam_code_list_to_gcode_file(output_filename, cam_code_list, plate_x, plate_y, plate_z, plate_width, plate_height, bmp_pixel_width, bmp_pixel_height, {})
+cam_code_list_to_gcode_file(output_filename, cam_code_list, plate_x, plate_y, plate_z, plate_width, plate_height, bmp_pixel_width, bmp_pixel_height, config_dict)
 

@@ -2,6 +2,7 @@
 #cam_code_list_to_gcode_file.py
 #Author: Andrew Feldman, 4/24/16
 #Description: OxideCAM backend GCODE generator.
+import math
 
 #Append an arbitrary number of blank lines to the GCODE file
 def blank_lines(number_of_lines=1):
@@ -46,9 +47,21 @@ def electrochemical_potential_command(duty_cycle_byte):
 #does not require float inputs
 def cam_code_list_to_gcode_file(output_filename, cam_code_list, plate_x, plate_y, plate_z, plate_width, plate_height, x_pixels, y_pixels, config_dict={}):
     
-    pixel_size=(float(plate_width)/float(x_pixels),float(plate_height)/float(y_pixels))
+    #What is the diameter (mm) of the tool tip?
+    tool_diameter_mm=1.0
+    if 'tool_diameter_mm' in config_dict:
+        tool_diameter_mm=config_dict['tool_diameter_mm']
+    
+    #pointilist: spread pixels out to fit plate size; otherwise: pixels are spaced to ensure contiguous color
+    if 'pointilist' in config_dict and config_dict['pointilist']:
+        pixel_size=(float(plate_width)/float(x_pixels),float(plate_height)/float(y_pixels))
+    else:
+        pixel_size=(tool_diameter_mm,tool_diameter_mm)
+    
+    #Displacement from pixel corner to pixel center
     pixel_center=(pixel_size[0]/2.0,pixel_size[1]/2.0)
     
+    #Gcode output file
     outfile=open(output_filename,'w')
     
     #Device initialization
