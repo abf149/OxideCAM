@@ -18,6 +18,11 @@ def dwell_command(dwell_ms):
 def finish_all_moves_command():    
     return "M400\n"
     
+    
+#Set coordinate system to absolute
+def absolute_coordinates_command():
+    return "G90\n"    
+    
 #Set coordinate system to relative
 def relative_coordinates_command():
     return "G91\n"
@@ -48,11 +53,13 @@ def cam_code_list_to_gcode_file(output_filename, cam_code_list, plate_x, plate_y
     
     #Device initialization
     #Center tool over top-left pixel
-    retract=10.0 #REPLACE WITH CONFIG
-    move_feedrate=50.0 #REPLACE WITH CONFIG
+    retract=1.0 #REPLACE WITH CONFIG
+    move_feedrate=3000.0 #REPLACE WITH CONFIG
     retract_feedrate=100.0 #REPLACE WITH CONFIG
-    dwell_ms=1000.0 #REPLACE WITH CONFIG
+    dwell_ms=1000.0 #REPLACE WITH CONFIG    
     initial_position=(plate_x+pixel_center[0],plate_y+pixel_center[1],plate_z-retract)
+    outfile.write(absolute_coordinates_command())    
+    outfile.write(electrochemical_potential_command(0))    
     outfile.write(z_move_command(initial_position[2],retract_feedrate))
     outfile.write(planar_move_command(initial_position[0],initial_position[1],move_feedrate))
     outfile.write(relative_coordinates_command())

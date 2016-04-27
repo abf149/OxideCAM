@@ -6,4 +6,4 @@
 import collections
 
 def normalized_potential_list_to_cam_code_list(normalized_potential_list,config_dict={}):
-    return collections.deque([norm_pot*255.0 for norm_pot in normalized_potential_list])
+    return collections.deque([int(norm_pot*255.0) for norm_pot in normalized_potential_list])

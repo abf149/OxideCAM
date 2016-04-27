@@ -36,7 +36,7 @@ cam_code_list=normalized_potential_list_to_cam_code_list(normalized_potential_li
 
 plate_x=0.0 #FROM CMD
 plate_y=0.0 #FROM CMD
-plate_z=0.0 #FROM CMD
+plate_z=9.1 #FROM CMD
 plate_width=30.0 #FROM CMD
 plate_height=30.0 #FROM CMD
 
