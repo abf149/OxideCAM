@@ -71,14 +71,19 @@ def cam_code_list_to_gcode_file(output_filename, cam_code_list, plate_x, plate_y
         
         potential = cam_code_list.popleft()
         
-        #Draw pixel, move right
-        outfile.write(finish_all_moves_command())
-        outfile.write(electrochemical_potential_command(potential))
-        outfile.write(z_move_command(retract,retract_feedrate))
-        outfile.write(dwell_command(dwell_ms))
-        outfile.write(z_move_command(-retract,retract_feedrate))
-        outfile.write(planar_move_command(pixel_size[0],0,move_feedrate))    
-        outfile.write(blank_lines(1))
+        if potential==0: #If this pixel is "blank" (will not result in any electrochemical growth)
+            #Do not make contact, move right
+            outfile.write(planar_move_command(pixel_size[0],0,move_feedrate))    
+            outfile.write(blank_lines(1))            
+        else:        
+            #Draw pixel, move right
+            outfile.write(finish_all_moves_command())
+            outfile.write(electrochemical_potential_command(potential))
+            outfile.write(z_move_command(retract,retract_feedrate))
+            outfile.write(dwell_command(dwell_ms))
+            outfile.write(z_move_command(-retract,retract_feedrate))
+            outfile.write(planar_move_command(pixel_size[0],0,move_feedrate))    
+            outfile.write(blank_lines(1))
     
         column_index+=1
     
