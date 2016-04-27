@@ -33,6 +33,9 @@ def flatten_image(pixel_array,width,height):
             
 #Pythagorean sum of RGB components of a pixel
 def rgb_to_magnitude(rgb_tuple):
+    if isinstance( rgb_tuple, int ):
+        return rgb_tuple #This image does not have RGB pixels; each pixel is an int.
+        
     return math.sqrt(rgb_tuple[0]**2 + rgb_tuple[1]**2 + rgb_tuple[2]**2)    
 
 #See file-top comments    
