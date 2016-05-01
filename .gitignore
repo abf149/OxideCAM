@@ -32,3 +32,6 @@
 
 #GCODE files
 *.gcode
+
+#Office lock files
+.~lock.*
