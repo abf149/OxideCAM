@@ -26,6 +26,7 @@ from pixel_magnitude_list_to_normalized_potential_list import pixel_magnitude_li
 from normalized_potential_list_to_cam_code_list import normalized_potential_list_to_cam_code_list
 from cam_code_list_to_gcode_file import cam_code_list_to_gcode_file
 
+import os
 import argparse
 import ConfigParser
 
@@ -37,7 +38,7 @@ parser.add_argument('Plate Height', type=float, help='The height (mm) of the met
 parser.add_argument('Plate X', type=float, help='X coordinate of the plates top-left corner')
 parser.add_argument('Plate Y', type=float, help='Y coordinate of the plates top-left corner')
 parser.add_argument('Plate Z', type=float, help='Z coordinate of the plate')
-parser.add_argument('Output File', help='Name of the file to create for the tools GCODE output. A .gcode extension is advisable.')
+parser.add_argument('-of', help='Name of the file to create for the tool\'s GCODE output. A .gcode extension is advisable. If omitted, the default output file has the same base filename and path as the input, but with a .gcode extension.', default="0|")
 
 input_vars = vars(parser.parse_args())
 plate_x=input_vars['Plate X']
@@ -46,7 +47,11 @@ plate_z=input_vars['Plate Z']
 plate_width=input_vars['Plate Width']
 plate_height=input_vars['Plate Height']
 input_filename=input_vars['Input File']
-output_filename=input_vars['Output File']
+output_filename=input_vars['of']
+
+#Determine output filename
+pre, ext = os.path.splitext(input_filename)
+if output_filename=="0|": output_filename=pre+".gcode"
 
 #Load configuration file
 config = ConfigParser.RawConfigParser()
