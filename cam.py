@@ -51,7 +51,7 @@ output_filename=input_vars['Output File']
 #Load configuration file
 config = ConfigParser.RawConfigParser()
 config.read('cam.cfg')
-config_dict = {'tool_diameter_mm':config.getfloat('Section1', 'tool_diameter_mm'),'pointilist':config.getboolean('Section1','pointilist')}
+config_dict = {'tool_diameter_mm':config.getfloat('Section1', 'tool_diameter_mm'),'pointilist':config.getboolean('Section1','pointilist'),'retract_mm':config.getfloat('Section1','retract_mm'),'move_feedrate_mm_min':config.getfloat('Section1','move_feedrate_mm_min'),'retract_feedrate_mm_min':config.getfloat('Section1','retract_feedrate_mm_min'),'grow_time_ms':config.getint('Section1','grow_time_ms')}
 
 #Flatten the input bitmap to a list of pixel magnitudes
 (bmp_pixel_width,bmp_pixel_height,number_of_pixels,pixel_magnitude_list)=bmp_to_pixel_magnitude_list(input_filename)
