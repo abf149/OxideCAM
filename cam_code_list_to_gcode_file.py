@@ -48,27 +48,33 @@ def resolve_configs(config_dict):
     tool_diameter_mm=1.0
     if 'tool_diameter_mm' in config_dict:
         tool_diameter_mm=config_dict['tool_diameter_mm']
-
+    else: print "Warning: no \'tool_diameter_mm\' config setting; defaulting to " + str(tool_diameter_mm)
+        
     pointilist=False
     #pointilist: spread pixels out to fit plate size; otherwise: pixels are spaced to ensure contiguous color
     if 'pointilist' in config_dict and config_dict['pointilist']:
         pointilist=True
+    else: print "Warning: no \'pointilist\' config setting; defaulting to " + str(pointilist)
 
     retract_mm=1.0
     if 'retract_mm' in config_dict:
         retract_mm=config_dict['retract_mm']
+    else: print "Warning: no \'retract_mm\' config setting; defaulting to " + str(retract_mm)        
     
     move_feedrate_mm_min=1500.0
     if 'move_feedrate_mm_min' in config_dict:
         move_feedrate_mm_min=config_dict['move_feedrate_mm_min']
-
+    else: print "Warning: no \'move_feedrate_mm_min\' config setting; defaulting to " + str(move_feedrate_mm_min)
+        
     retract_feedrate_mm_min=100.0
     if 'retract_feedrate_mm_min' in config_dict:
         retract_feedrate_mm_min=config_dict['retract_feedrate_mm_min']
-
+    else: print "Warning: no \'retract_feedrate_mm_min\' config setting; defaulting to " + str(retract_feedrate_mm_min)
+        
     grow_time_ms=1000
     if 'grow_time_ms' in config_dict:
         grow_time_ms=config_dict['grow_time_ms']        
+    else: print "Warning: no \'grow_time_ms\' config setting; defaulting to " + str(grow_time_ms)    
     
     return (tool_diameter_mm,pointilist,retract_mm,move_feedrate_mm_min,retract_feedrate_mm_min,grow_time_ms)
     

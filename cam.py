@@ -56,7 +56,13 @@ if output_filename=="0|": output_filename=pre+".gcode"
 #Load configuration file
 config = ConfigParser.RawConfigParser()
 config.read('cam.cfg')
-config_dict = {'tool_diameter_mm':config.getfloat('Section1', 'tool_diameter_mm'),'pointilist':config.getboolean('Section1','pointilist'),'retract_mm':config.getfloat('Section1','retract_mm'),'move_feedrate_mm_min':config.getfloat('Section1','move_feedrate_mm_min'),'retract_feedrate_mm_min':config.getfloat('Section1','retract_feedrate_mm_min'),'grow_time_ms':config.getint('Section1','grow_time_ms')}
+config_dict={}
+for t in config.items('Boolean'):
+    config_dict[t[0]]=bool(t[1])
+for t in config.items('Float'):
+    config_dict[t[0]]=float(t[1])
+for t in config.items('Integer'):
+    config_dict[t[0]]=int(t[1])    
 
 #Flatten the input bitmap to a list of pixel magnitudes
 (bmp_pixel_width,bmp_pixel_height,number_of_pixels,pixel_magnitude_list)=bmp_to_pixel_magnitude_list(input_filename)
