@@ -10,14 +10,14 @@
  * -Nano receives the string and interprets it as a request for a measurement of the OxidePrinter tool's electrochemical potential
  * -Nano measures electrochemical potential via ADC and relays it back to the user via serial
  * 
- * Uses 115200 baud serial-over-USB and Arduino Nano ADC pin 0. Max voltage is 3.3V, so you will want to connect the OxidePrinter tool to a voltage divider that brings the voltage at ADC pin 0 below 3.3V.
+ * Uses 115200 baud serial-over-USB and Arduino Nano ADC pin 0. uC operating voltage is 5V, so you will want to connect the OxidePrinter tool to a voltage divider that brings the voltage at ADC pin 0 below 5V.
  * 
  */
 
 void setup() {
 
   Serial.begin(115200);
-  analogReference(DEFAULT); //3.3V analog ref
+  analogReference(DEFAULT); //5V analog ref
 }
 
 void loop() {
@@ -29,6 +29,6 @@ void loop() {
 
     //Measure the OxidePrinter tool voltage and relay it back to the user.
     //Nano ADC numeric range is 0-1023
-    Serial.println(analogRead(0)*(3.3)/(1023.0));
+    Serial.println(analogRead(0)*(5)/(1023.0));
   }
 }
