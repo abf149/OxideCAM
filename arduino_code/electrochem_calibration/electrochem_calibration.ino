@@ -22,13 +22,22 @@ void setup() {
 
 void loop() {
   if(Serial.available() > 0) {
+    int i=0;
     while (Serial.available() >0) {
       Serial.read();
+      i++;
       delay(100);
-    } //Wait for the user to send a request (arbitrary string), make damn sure we've read every byte on the buffer.
+    } //Wait for the user to send a request (arbitrary string). The length of the request encodes the number of measurements to average.
 
-    //Measure the OxidePrinter tool voltage and relay it back to the user.
-    //Nano ADC numeric range is 0-1023
-    Serial.println(analogRead(0)*(5)/(1023.0));
+    //Average multiple measurements of the OxidePrinter tool voltage and relay it back to the user.
+    //Nano ADC readings are integers 0-1023
+
+    long int accumulator=0;
+    for(int j=0; j<i; j++) {
+      accumulator+=analogRead(0);
+    }
+    float mean=float(accumulator)/float(i);
+    
+    Serial.println(mean*(5.0)/(1023.0));
   }
 }
