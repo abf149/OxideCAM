@@ -25,9 +25,10 @@ void loop() {
     while (Serial.available() >0) {
       Serial.read();
       delay(100);
-    } //Wait for the user to send a request, then make damn sure we've read every byte on the buffer.
+    } //Wait for the user to send a request (arbitrary string), make damn sure we've read every byte on the buffer.
 
     //Measure the OxidePrinter tool voltage and relay it back to the user.
+    //Nano ADC numeric range is 0-1023
     Serial.println(analogRead(0)*(3.3)/(1023.0));
   }
 }
