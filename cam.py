@@ -39,7 +39,7 @@ parser.add_argument('Plate X', type=float, help='X coordinate of the plates top-
 parser.add_argument('Plate Y', type=float, help='Y coordinate of the plates top-left corner')
 parser.add_argument('Plate Z', type=float, help='Z coordinate of the plate')
 parser.add_argument('-of', help='Name of the file to create for the tool\'s GCODE output. A .gcode extension is advisable. If omitted, the default output file has the same base filename and path as the input, but with a .gcode extension.', default="0|")
-parser.add_argument('-full_plate', action='store_true', help='Rescale the input image to the size of the plate. Cancels the effects of -offset and -resize')
+parser.add_argument('-full_plate', action='store_true', help='Rescale the input image to the size of the plate. Cancels the effects of -offset and -rescale')
 parser.add_argument('-offset', help='Provide an ordered pair x,y representing the offset of the image from the plate\'s top-right corner.', default="(0,0)")
 parser.add_argument('-rescale', type=float, help='Provide an ordered pair x,y representing the offset of the image from the plate\'s top-right corner.', default="1.0")
 
