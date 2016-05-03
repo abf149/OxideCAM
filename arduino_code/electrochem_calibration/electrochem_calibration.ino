@@ -39,8 +39,8 @@ void loop() {
       A0_accumulator+=analogRead(0);
       A1_accumulator+=analogRead(1);      
     }
-    float mean_differential=(float(A1_accumulator)-float(A0_accumulator))/float(i); //Mean of (rail-source)
+    float mean_differential=(10.931*float(A1_accumulator)-10.958*float(A0_accumulator))/float(i); //Mean of (rail-source)
     
-    Serial.println(mean_differential*(5.0)/(1023.0),6); //Arduino Nano ADC readings are integers 0-1023, which maps to 0-5V
+    Serial.println(mean_differential*(4.7825)/(1023.0),6); //Arduino Nano ADC readings are integers 0-1023, which maps to 0-5V
   }
 }
