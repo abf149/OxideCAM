@@ -42,7 +42,7 @@ for i in range(256):
     print("PWM="+str(i))
     PRINTER_COM.write("M106 S" + str(i) + "\n")
     time.sleep(1)
-    DAQ_COM.write("1111111111")
+    DAQ_COM.write("1111111111") #Average 10 ADC readings
     while(DAQ_COM.in_waiting==0): pass
     voltage=""
     while(DAQ_COM.in_waiting>0):
