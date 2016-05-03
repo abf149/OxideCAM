@@ -21,15 +21,19 @@ import time
 DAQ_COM_NAME="COM4"
 PRINTER_COM_NAME="COM3"
 
+print "Starting..."
+
 DAQ_COM = serial.Serial(
     port=DAQ_COM_NAME,
     baudrate=115200,
 )
+print "Connected to DAQ."
 
 PRINTER_COM = serial.Serial(
     port=PRINTER_COM_NAME,
     baudrate=115200,
 )
+print "Connected to OxidePrinter."
 
 print "Waiting for DAQ and printer..."
 DAQ_COM.isOpen()

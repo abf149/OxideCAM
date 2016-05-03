@@ -1,4 +1,4 @@
-f=open("cali.txt","r")
+f=open("cali.cal","r")
 
 v_prev=-1
 i=0
