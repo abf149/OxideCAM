@@ -41,7 +41,7 @@ def rgb_to_magnitude(rgb_tuple):
 #See file-top comments    
 def bmp_to_pixel_magnitude_list(bmp_filepath):
     #try:
-    im = Image.open(bmp_filepath)
+    im = Image.open(bmp_filepath).transpose(Image.FLIP_LEFT_RIGHT)
     width, height = im.size
     number_of_pixels=width*height
     

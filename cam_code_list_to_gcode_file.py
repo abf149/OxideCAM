@@ -136,8 +136,14 @@ def cam_code_list_to_gcode_file(output_filename, cam_code_list, plate_x, plate_y
         if column_index == x_pixels:
             #Carriage return
             outfile.write(blank_lines(4))        
-            outfile.write(planar_move_command(-plate_width,pixel_size[1],move_feedrate_mm_min))
+            outfile.write(planar_move_command(-(pixel_size[0]*x_pixels),pixel_size[1],move_feedrate_mm_min))
             outfile.write(blank_lines(5))        
             column_index=0            
 
+    outfile.write(absolute_coordinates_command())    
+    outfile.write(electrochemical_potential_command(0))    
+    outfile.write(z_move_command(initial_position[2],retract_feedrate_mm_min))
+    outfile.write(planar_move_command(initial_position[0],initial_position[1],move_feedrate_mm_min))
+    outfile.write(relative_coordinates_command())            
+            
     outfile.close()
