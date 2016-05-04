@@ -52,8 +52,8 @@ def resolve_configs(config_dict):
         
     pointilist=False
     #pointilist: spread pixels out to fit plate size; otherwise: pixels are spaced to ensure contiguous color
-    if 'pointilist' in config_dict and config_dict['pointilist']:
-        pointilist=True
+    if 'pointilist' in config_dict:
+        pointilist=config_dict['pointilist']
     else: print "Warning: no \'pointilist\' config setting; defaulting to " + str(pointilist)
 
     retract_mm=1.0
@@ -76,18 +76,24 @@ def resolve_configs(config_dict):
         grow_time_ms=config_dict['grow_time_ms']        
     else: print "Warning: no \'grow_time_ms\' config setting; defaulting to " + str(grow_time_ms)    
     
-    return (tool_diameter_mm,pointilist,retract_mm,move_feedrate_mm_min,retract_feedrate_mm_min,grow_time_ms)
+    pixel_to_tool_diameter_ratio=0.5
+    if 'pixel_to_tool_diameter_ratio' in config_dict:
+        pixel_to_tool_diameter_ratio=config_dict['pixel_to_tool_diameter_ratio']
+    else: print "Warning: no \'pixel_to_tool_diameter_ratio\' config setting; defaulting to " + str(pixel_to_tool_diameter_ratio)    
+    
+    return (tool_diameter_mm,pointilist,retract_mm,move_feedrate_mm_min,retract_feedrate_mm_min,grow_time_ms,pixel_to_tool_diameter_ratio)
     
 #positions, dimensions in mm
 #does not require float inputs
 def cam_code_list_to_gcode_file(output_filename, cam_code_list, plate_x, plate_y, plate_z, plate_width, plate_height, x_pixels, y_pixels, config_dict={}):
    
-    tool_diameter_mm,pointilist,retract_mm,move_feedrate_mm_min,retract_feedrate_mm_min,grow_time_ms=resolve_configs(config_dict)
+    tool_diameter_mm,pointilist,retract_mm,move_feedrate_mm_min,retract_feedrate_mm_min,grow_time_ms,pixel_to_tool_diameter_ratio=resolve_configs(config_dict)
 
     if pointilist:
         pixel_size=(float(plate_width)/float(x_pixels),float(plate_height)/float(y_pixels))
     else:
-        pixel_size=(tool_diameter_mm,tool_diameter_mm)
+        characteristic_dimension=pixel_to_tool_diameter_ratio*tool_diameter_mm
+        pixel_size=(characteristic_dimension,characteristic_dimension)
     
     #Displacement from pixel corner to pixel center
     pixel_center=(pixel_size[0]/2.0,pixel_size[1]/2.0)

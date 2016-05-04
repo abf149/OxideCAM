@@ -29,6 +29,7 @@ from cam_code_list_to_gcode_file import cam_code_list_to_gcode_file
 import os
 import argparse
 import ConfigParser
+from calibration_lookup import CalibrationLookupTable
 
 #Parse CMD arguments
 parser = argparse.ArgumentParser(description='Generate a GCODE file for rendering an image as a patterned electrochemical deposit on a metal plate.')
@@ -73,12 +74,24 @@ config = ConfigParser.RawConfigParser()
 config.read('cam.cfg')
 config_dict={}
 for t in config.items('Boolean'):
-    config_dict[t[0]]=bool(t[1])
+    config_dict[t[0]]=config.getboolean('Boolean',t[0])
 for t in config.items('Float'):
-    config_dict[t[0]]=float(t[1])
+    config_dict[t[0]]=config.getfloat('Float',t[0])
 for t in config.items('Integer'):
-    config_dict[t[0]]=int(t[1])    
+    config_dict[t[0]]=config.getint('Integer',t[0])    
+for t in config.items('String'):
+    config_dict[t[0]]=t[1]
 
+default_calibration_filename="cali.cal"
+if 'default_calibration_filename' in config_dict:
+        default_calibration_filename=config_dict['default_calibration_filename']
+else: print('Could not find default calibration filename config setting; defaulting to ' + default_calibration_filename)
+calibration_filename=default_calibration_filename #TODO: allow option to set this via CMD line
+
+#Table mapping from desired voltage drop across OxideCAM tool to necessary PWM input duty cycle (encoded as 0-255 byte value)
+calibration_table=CalibrationLookupTable(6)
+calibration_table.load_calibration(calibration_filename)
+    
 #Flatten the input bitmap to a list of pixel magnitudes
 (bmp_pixel_width,bmp_pixel_height,number_of_pixels,pixel_magnitude_list)=bmp_to_pixel_magnitude_list(input_filename)
 
@@ -86,7 +99,7 @@ for t in config.items('Integer'):
 normalized_potential_list=pixel_magnitude_list_to_normalized_potential_list(pixel_magnitude_list,config_dict)
 
 #Convert normalized potentials to CAM control codes for the electrochemical voltage source
-cam_code_list=normalized_potential_list_to_cam_code_list(normalized_potential_list,config_dict)
+cam_code_list=normalized_potential_list_to_cam_code_list(normalized_potential_list,calibration_table,config_dict)
 
 #GCode
 cam_code_list_to_gcode_file(output_filename, cam_code_list, plate_x, plate_y, plate_z, plate_width, plate_height, bmp_pixel_width, bmp_pixel_height, config_dict)

@@ -23,22 +23,30 @@ class CalibrationLookupTable:
         self.equality_threshold=math.pow(10,-decimal_places)
         self.table=[]
         self.table_length=0
+        self.min_voltage=float('inf')
+        self.max_voltage=0
         
     #calibration_file_name: filename of the file containing OxidePrinter voltage source calibration data
     def load_calibration(self,calibration_file_name):
         self.cali_fn=calibration_file_name    
         self.table=[]
         self.table_length=0
+        self.min_voltage=float('inf')
+        self.max_voltage=0
         
         cali_file=open(calibration_file_name,'r')
         for file_line in cali_file:
             try:
-                self.table.append(float(file_line))
+                val=float(file_line)
+                if val < self.min_voltage: self.min_voltage=val
+                if val > self.max_voltage: self.max_voltage=val
+                self.table.append(val)
             except ValueError: #Fill self.table with calibration file lines that are numeric.
                 pass
         cali_file.close()
         
         self.table_length=len(self.table)
+        
         
     #log complexity binary search for a table entry that matches output_voltage to within self.equality_threshold
     #Another module calls this method as search(output_voltage), leaving other arguments to their default values.
