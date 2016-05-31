@@ -8,9 +8,9 @@ import csv
 import colorsys as csys
 import math
 
-process="hsv_dist"
+process="dist"
 
-input_file="./pics/elyse_bmp_55_55.bmp"
+input_file="./composites/tiger_head_rainbow_diag_110_110.bmp"
 
 if process=="hue":
     color_file="./color_data/v_to_hsv.csv"
