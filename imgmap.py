@@ -8,13 +8,13 @@ import csv
 import colorsys as csys
 import math
 
-process="dist"
+process="hsv_dist"
 
 input_file="./pics/elyse_bmp_55_55.bmp"
 
 if process=="hue":
     color_file="./color_data/v_to_hsv.csv"
-elif process=="dist":
+elif process=="dist" or process=="hsv_dist":
     color_file="./color_data/v_to_rgb.csv"    
     
 v_min=5.04521
@@ -48,20 +48,33 @@ rgb_array = im.load()
 indexed_pic=[]
 pixel_dict={}
 pixel_array=[]
+pixel_hist=[]
 index=0
 
 for y in range(width):
     indexed_pic.append([])
     for x in range(height):
         p=rgb_array[x,y]
-        if p in pixel_dict: indexed_pic[y].append(pixel_dict[p])
+        if p in pixel_dict: 
+            indexed_pic[y].append(pixel_dict[p])
+            pixel_hist[pixel_dict[p]]+=1
         else:
             pixel_array.append(p)
+            pixel_hist.append(1)
             pixel_dict[p]=index
             indexed_pic[y].append(index)
             index+=1
 
 print("Pixels indexed.")            
+
+import matplotlib.pyplot as pp
+
+pp.hist(pixel_hist)
+#print pixel_hist
+k=open('hist.csv','w')
+for x in pixel_hist:
+    k.write(str(x)+'\n')
+k.close()
             
 palette_map=[0 for i in range(len(pixel_array))]
             
@@ -104,6 +117,32 @@ elif process=="dist":
         palette_map[i]=min_index
         #print(min_index)
 
+elif process=="hsv_dist":
+    
+    for i in range(len(pixel_array)):
+        img_coord=pixel_array[i]
+    
+        hsv_img=csys.rgb_to_hsv(img_coord[0],img_coord[1],img_coord[2])                
+    
+        min_dist=100000
+        min_index=-1
+        for j in range(len(color_table)):        
+            real_coord=(color_table[j][1],color_table[j][2],color_table[j][3])
+           
+            hsv_real=csys.rgb_to_hsv(real_coord[0],real_coord[1],real_coord[2])
+
+            delta_hue=(10*min(abs(hsv_real[0]-hsv_img[0]),1-abs(hsv_real[0]-hsv_img[0])))**2.5
+            #print delta_hue
+            dist=math.sqrt(abs(img_coord[0]-real_coord[0])**2+abs(img_coord[1]-real_coord[1])**2+abs(img_coord[2]-real_coord[2])**2) + delta_hue
+            #print(delta_hue)
+            if dist<min_dist:
+                min_dist=dist
+                min_index=j
+                
+        #print(min_index)
+        palette_map[i]=min_index
+        #print(min_index)        
+        
 print("Color-mapping chosen.")
         
 palette_V=[color_table[palette_map[i]][0] for i in range(len(palette_map))]            
